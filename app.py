@@ -12,7 +12,7 @@ if hasattr(app, 'json'):
 
 # Simple cache
 cache = {}
-CACHE_DURATION = 300  # 5 minutes
+CACHE_DURATION = 300 # 5 minutes
 
 # API VALIDITY (Extended 1 month from current date to August 9, 2026)
 EXPIRY_DATE = datetime(2026, 8, 9)
@@ -30,28 +30,21 @@ def set_cache(cache_key, data):
 def clean_response(data, top_level=True):
     if isinstance(data, dict):
         cleaned = {}
-
         for key, value in data.items():
             if key in ['req_left', 'req_total', 'expiry', 'developer']:
                 continue
-
             if isinstance(value, str):
-                cleaned[key] = value.replace('@simpleguy444', '@RichUniversal')
+                cleaned[key] = value.replace('@simpleguy444', 'Old Id Ban Contact On new Id @RichAllOver')
             else:
                 cleaned[key] = clean_response(value, False)
-
         # Add Credit only to the root object.
         if top_level:
-            cleaned["Credit"] = "@RichUniversal"
-
+            cleaned["Credit"] = "Old Id Ban Contact On new Id @RichAllOver"
         return cleaned
-
     elif isinstance(data, list):
         return [clean_response(item, False) for item in data]
-
     elif isinstance(data, str):
-        return data.replace('@simpleguy444', '@RichUniversal')
-
+        return data.replace('@simpleguy444', 'Old Id Ban Contact On new Id @RichAllOver')
     return data
 
 @app.route('/api', methods=['GET'])
@@ -59,35 +52,38 @@ def api_handler():
     # --- Validity Check ---
     if datetime.now() > EXPIRY_DATE:
         return jsonify({
-            "error": "API has expired. Validity was for 1 month.", 
-            "Credit": "@RichUniversal"
+            "error": "API has expired. Validity was for 1 month.",
+            "Credit": "Old Id Ban Contact On new Id @RichAllOver"
         }), 403
 
     # --- KEY ENFORCEMENT ---
     provided_key = request.args.get('key', '')
     if provided_key.lower() != 'bhalupoint':
         return jsonify({
-            "error": "Access Denied. Invalid API key.", 
-            "Credit": "@RichUniversal"
+            "error": "Access Denied. Invalid API key.",
+            "Credit": "Old Id Ban Contact On new Id @RichAllOver"
         }), 401
 
     # --- PARAMETER TRANSLATION FIX ---
-    frontend_type = request.args.get('type', 'num') 
+    frontend_type = request.args.get('type', 'num')
     frontend_term = request.args.get('query') or request.args.get('term', '')
-    
+
     if not frontend_term:
-        return jsonify({"error": "Query or term parameter required", "Credit": "@RichUniversal"}), 400
-        
+        return jsonify({
+            "error": "Query or term parameter required",
+            "Credit": "Old Id Ban Contact On new Id @RichAllOver"
+        }), 400
+
     backend_type = 'num' if frontend_type == 'mobile' else frontend_type
-    
+
     # Create cache key using the updated API key namespace
     cache_key = f"{backend_type}:bhalupoint:{frontend_term}"
-    
+
     # Check cache
     cached_response = get_cached_response(cache_key)
     if cached_response:
         return jsonify(cached_response)
-    
+
     try:
         # Request to original API with translated parameters
         backend_key = "swayam"
@@ -106,21 +102,20 @@ def api_handler():
             return jsonify(cleaned_data)
         else:
             return jsonify({
-                "error": "Failed to fetch data from upstream", 
+                "error": "Failed to fetch data from upstream",
                 "upstream_status_code": response.status_code,
-                "Credit": "@RichUniversal"
+                "Credit": "Old Id Ban Contact On new Id @RichAllOver"
             }), 500
-            
+
     except requests.exceptions.Timeout:
         return jsonify({
             "error": "Upstream API took too long to respond (Timeout Limit Exceeded)",
-            "Credit": "@RichUniversal"
+            "Credit": "Old Id Ban Contact On new Id @RichAllOver"
         }), 504
-        
     except Exception as e:
         return jsonify({
             "error": f"Internal Script Error: {str(e)}",
-            "Credit": "@RichUniversal"
+            "Credit": "Old Id Ban Contact On new Id @RichAllOver"
         }), 500
 
 @app.route('/', methods=['GET'])
@@ -128,6 +123,6 @@ def health_check():
     return jsonify({
         "status": "System Online",
         "valid_until": EXPIRY_DATE.strftime('%Y-%m-%d'),
-        "Credit": "@RichUniversal",
+        "Credit": "Old Id Ban Contact On new Id @RichAllOver",
         "usage": "/api?key=bhalupoint&type=mobile&term=9758126124"
     })
